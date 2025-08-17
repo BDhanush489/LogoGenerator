@@ -8,7 +8,7 @@ function GenerateLogo() {
 
   const [prompt, setPrompt] = useState("");
   const [loading, setLoading] = useState(false);
-  const [imageUrl, setImageUrl] = useState("");
+  const [imageUrl, setImageUrl] = useState();
   const [error, setError] = useState("");
 
   const genAI = new GoogleGenerativeAI(import.meta.env.VITE_GEMINI_API_KEY);
@@ -34,7 +34,6 @@ function GenerateLogo() {
 
     setLoading(true);
     setError("");
-    setImageUrl("");
 
     try {
       // 1️⃣ Create prompt with Gemini
