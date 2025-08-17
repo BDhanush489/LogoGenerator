@@ -16,7 +16,7 @@ function Header() {
     const handleLogout = () => {
         localStorage.removeItem("user");
         setUser(null);
-        window.location.href = "/login";
+        navigate("/login");
     };
 
     return (
@@ -63,7 +63,7 @@ function Header() {
                                 </>
                             ) : (
                                 <button
-                                    onClick={() => (window.location.href = "/login")}
+                                    onClick={() => navigate("/login")}
                                     className="bg-gradient-to-r from-blue-500 to-purple-600 text-white px-6 py-2 rounded-lg font-semibold hover:from-blue-600 hover:to-purple-700 transition-all duration-200"
                                 >
                                     Sign In

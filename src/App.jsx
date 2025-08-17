@@ -37,7 +37,7 @@ import GenerateLogo from "./pages/GenerateLogo";
 
 
 function App() {
-  const [showLogin, setShowLogin] = useState(false);
+  // const [showLogin, setShowLogin] = useState(false);
 
   return (
      <div>
