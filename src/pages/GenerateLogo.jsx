@@ -14,13 +14,13 @@ function GenerateLogo() {
   const genAI = new GoogleGenerativeAI(import.meta.env.VITE_GEMINI_API_KEY);
 
   // call backend (server.js) → HuggingFace/Gradio
+  // call HuggingFace/Gradio directly from frontend
   async function queryHF(finalPrompt) {
     try {
-
       // Connect to the Hugging Face Space via Gradio client
       const client = await Client.connect("multimodalart/Qwen-Image-Fast");
 
-      // Call the /run endpoint with parameters, including the prompt
+      // Call the /infer endpoint
       const result = await client.predict("/infer", {
         prompt: finalPrompt,
         seed: 0,
@@ -31,14 +31,15 @@ function GenerateLogo() {
         prompt_enhance: true,
       });
 
-      // result.data contains the response (likely base64 image or URL)
-      return NextResponse.json({ data: result.data });
+      // return actual image URL (or base64)
+      return result.data[0];
 
     } catch (error) {
-      console.error('Error generating image:', error);
-      return NextResponse.json({ error: 'Failed to generate image' }, { status: 500 });
+      console.error("Error generating image:", error);
+      throw error;
     }
   }
+
 
   const generatePromptAndLogo = async () => {
     if (!style || !logoType || !name) {
