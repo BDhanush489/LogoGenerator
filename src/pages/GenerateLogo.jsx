@@ -8,7 +8,7 @@ function GenerateLogo() {
 
   const [prompt, setPrompt] = useState("");
   const [loading, setLoading] = useState(false);
-  const [imageUrl, setImageUrl] = useState("");
+  const [imageUrl, setImageUrl] = useState();
   const [error, setError] = useState("");
 
   const genAI = new GoogleGenerativeAI(import.meta.env.VITE_GEMINI_API_KEY);
@@ -25,21 +25,6 @@ function GenerateLogo() {
     if (!data.success) throw new Error(data.error || "HF generation failed");
     return data.url;
   }
-  
-  async function imageUrlToBase64(imageUrl) {
-    const response = await fetch(imageUrl);
-    const blob = await response.blob();
-
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onloadend = () => resolve(reader.result);
-      reader.onerror = reject;
-      reader.readAsDataURL(blob); // Converts to base64 string
-    });
-  }
-
-
-
 
   const generatePromptAndLogo = async () => {
     if (!style || !logoType || !name) {
@@ -72,9 +57,8 @@ Return only the final MidJourney prompt, nothing else.`;
       // 2️⃣ Call backend → HuggingFace
       const imgUrl = await queryHF(finalPrompt);
       if (!imgUrl) throw new Error("No image returned from Hugging Face");
-      const base64Img = await imageUrlToBase64(imageUrl);
-      setImageUrl(base64Img)
-      // setImageUrl(imgUrl);
+
+      setImageUrl(imgUrl);
       console.log(imgUrl)
     } catch (err) {
       console.error(err);
@@ -109,11 +93,11 @@ Return only the final MidJourney prompt, nothing else.`;
         <div className="mt-6">
           <h2 className="font-bold mb-2">Generated Logo:</h2>
           <img
+            className="w-64 h-64 object-contain rounded shadow"
             src={imageUrl}
             alt="Generated Logo"
-            className="w-64 h-64 object-contain border rounded shadow"
           />
-
+          
           <a
             href={imageUrl}
             download="logo.png"
