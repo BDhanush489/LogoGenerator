@@ -53,12 +53,15 @@ function Header() {
                                     <img
                                         src={user.picture}
                                         alt="Profile"
-                                        className="w-10 h-10 rounded-full "
+                                        className="w-10 h-10 rounded-full"
                                     />
-                                    <span className="font-medium">{user.name}</span>
+                                    {/* Hide name on very small screens, truncate if too long */}
+                                    <span className="hidden sm:inline max-w-[100px] truncate font-medium">
+                                        {user.name}
+                                    </span>
                                     <button
                                         onClick={handleLogout}
-                                        className="bg-gradient-to-r from-blue-500 to-purple-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-gradient-to-r from-blue-500 to-purple-600 transition-all duration-200"
+                                        className="bg-gradient-to-r from-blue-500 to-purple-600 text-white px-4 py-2 rounded-lg font-semibold hover:from-blue-600 hover:to-purple-700 transition-all duration-200"
                                     >
                                         Logout
                                     </button>
@@ -71,7 +74,7 @@ function Header() {
                                     Sign In
                                 </button>
                             )}
-                            
+
                         </div>
                     </div>
                 </div>

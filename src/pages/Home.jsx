@@ -177,15 +177,18 @@ function Home() {
 
 
                                 <div className="space-y-4">
-                                    <div className="grid grid-cols-2 gap-4">
+                                    {/* Responsive grid: 1 col on mobile, 2 cols on md+ */}
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                         <div>
-                                            <label className="block text-sm font-semibold text-gray-700 mb-3">Primary Color</label>
-                                            <div className="flex items-center gap-3">
+                                            <label className="block text-sm font-semibold text-gray-700 mb-3">
+                                                Primary Color
+                                            </label>
+                                            <div className="flex flex-col sm:flex-row sm:items-center gap-3">
                                                 <input
                                                     type="color"
                                                     value={color}
                                                     onChange={(e) => setColor(e.target.value)}
-                                                    className="w-12 h-12 border border-gray-200 rounded-lg cursor-pointer outline-none"
+                                                    className="w-full sm:w-12 h-12 border border-gray-200 rounded-lg cursor-pointer outline-none"
                                                 />
                                                 <input
                                                     type="text"
@@ -196,15 +199,16 @@ function Home() {
                                             </div>
                                         </div>
 
-
                                         <div>
-                                            <label className="block text-sm font-semibold text-gray-700 mb-3">Secondary Color</label>
-                                            <div className="flex items-center gap-3">
+                                            <label className="block text-sm font-semibold text-gray-700 mb-3">
+                                                Secondary Color
+                                            </label>
+                                            <div className="flex flex-col sm:flex-row sm:items-center gap-3">
                                                 <input
                                                     type="color"
                                                     value={secondaryColor}
                                                     onChange={(e) => setSecondaryColor(e.target.value)}
-                                                    className="w-12 h-12 border border-gray-200 rounded-lg cursor-pointer"
+                                                    className="w-full sm:w-12 h-12 border border-gray-200 rounded-lg cursor-pointer"
                                                 />
                                                 <input
                                                     type="text"
@@ -214,13 +218,14 @@ function Home() {
                                                 />
                                             </div>
                                         </div>
-
-
                                     </div>
 
-                                    <div className="grid grid-cols-1 gap-4 ">
+                                    {/* Font Family dropdown */}
+                                    <div className="grid grid-cols-1 gap-4">
                                         <div>
-                                            <label className="block text-sm font-semibold text-gray-700 mb-3">Font Family</label>
+                                            <label className="block text-sm font-semibold text-gray-700 mb-3">
+                                                Font Family
+                                            </label>
                                             <select
                                                 value={fontFamily}
                                                 onChange={(e) => setFontFamily(e.target.value)}
@@ -234,10 +239,9 @@ function Home() {
                                                 <option value="Impact">Impact</option>
                                             </select>
                                         </div>
-
-
                                     </div>
                                 </div>
+
                             </div>
 
                             <button
