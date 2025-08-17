@@ -25,8 +25,21 @@ function GenerateLogo() {
     if (!data.success) throw new Error(data.error || "HF generation failed");
     return data.url;
   }
-
   
+  async function imageUrlToBase64(imageUrl) {
+    const response = await fetch(imageUrl);
+    const blob = await response.blob();
+
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onloadend = () => resolve(reader.result);
+      reader.onerror = reject;
+      reader.readAsDataURL(blob); // Converts to base64 string
+    });
+  }
+
+
+
 
   const generatePromptAndLogo = async () => {
     if (!style || !logoType || !name) {
@@ -100,7 +113,7 @@ Return only the final MidJourney prompt, nothing else.`;
             alt="Generated Logo"
             className="w-64 h-64 object-contain border rounded shadow"
           />
-          
+
           <a
             href={imageUrl}
             download="logo.png"
