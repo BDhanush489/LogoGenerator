@@ -1,7 +1,6 @@
 import { useLocation } from "react-router-dom";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { useState } from "react";
-import { Client } from "@gradio/client";
 
 function GenerateLogo() {
   const { state } = useLocation();
@@ -9,38 +8,23 @@ function GenerateLogo() {
 
   const [prompt, setPrompt] = useState("");
   const [loading, setLoading] = useState(false);
-  const [imageUrl, setImageUrl] = useState();
+  const [imageUrl, setImageUrl] = useState("");
   const [error, setError] = useState("");
 
   const genAI = new GoogleGenerativeAI(import.meta.env.VITE_GEMINI_API_KEY);
 
   // call backend (server.js) → HuggingFace/Gradio
-  // call HuggingFace/Gradio directly from frontend
   async function queryHF(finalPrompt) {
-    try {
-      // Connect to the Hugging Face Space via Gradio client
-      const client = await Client.connect("multimodalart/Qwen-Image-Fast");
+    const response = await fetch("http://localhost:5000/generate-logo", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ prompt: finalPrompt }),
+    });
 
-      // Call the /infer endpoint
-      const result = await client.predict("/infer", {
-        prompt: finalPrompt,
-        seed: 0,
-        randomize_seed: true,
-        aspect_ratio: "1:1",
-        guidance_scale: 1,
-        num_inference_steps: 4,
-        prompt_enhance: true,
-      });
-
-      // return actual image URL (or base64)
-      return result.data[0];
-
-    } catch (error) {
-      console.error("Error generating image:", error);
-      throw error;
-    }
+    const data = await response.json();
+    if (!data.success) throw new Error(data.error || "HF generation failed");
+    return data.url;
   }
-
 
   const generatePromptAndLogo = async () => {
     if (!style || !logoType || !name) {
@@ -50,6 +34,7 @@ function GenerateLogo() {
 
     setLoading(true);
     setError("");
+    setImageUrl("");
 
     try {
       // 1️⃣ Create prompt with Gemini
@@ -104,11 +89,25 @@ Return only the final MidJourney prompt, nothing else.`;
         </div>
       )}
 
-      <div className='md:w-[25rem] md:h-[25rem] w-[80%] flex justify-center mx-auto'>
-        {imageUrl ? <img className='md:w-[25rem] md:h-[25rem] w-[80%]' src={imageUrl} /> : <div className="w-[25rem] h-[25rem] flex justify-center items-center">
-
-        </div>}
-      </div>
+      {imageUrl && (
+        <div className="mt-6">
+          <h2 className="font-bold mb-2">Generated Logo:</h2>
+          <img
+            src={imageUrl}
+            alt="Generated Logo"
+            className="w-64 h-64 object-contain border rounded shadow"
+          />
+          <p>{imageUrl}</p>
+          
+          <a
+            href={imageUrl}
+            download="logo.png"
+            className="mt-3 inline-block bg-green-600 text-white px-4 py-2 rounded"
+          >
+            Download Logo
+          </a>
+        </div>
+      )}
     </div>
   );
 }
