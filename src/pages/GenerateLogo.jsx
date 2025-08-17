@@ -26,6 +26,8 @@ function GenerateLogo() {
     return data.url;
   }
 
+  
+
   const generatePromptAndLogo = async () => {
     if (!style || !logoType || !name) {
       alert("Please provide all necessary logo details.");
@@ -57,8 +59,9 @@ Return only the final MidJourney prompt, nothing else.`;
       // 2️⃣ Call backend → HuggingFace
       const imgUrl = await queryHF(finalPrompt);
       if (!imgUrl) throw new Error("No image returned from Hugging Face");
-
-      setImageUrl(imgUrl);
+      const base64Img = await imageUrlToBase64(imageUrl);
+      setImageUrl(base64Img)
+      // setImageUrl(imgUrl);
       console.log(imgUrl)
     } catch (err) {
       console.error(err);
