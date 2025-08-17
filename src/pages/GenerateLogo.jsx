@@ -15,15 +15,29 @@ function GenerateLogo() {
 
   // call backend (server.js) → HuggingFace/Gradio
   async function queryHF(finalPrompt) {
-    const response = await fetch("http://localhost:5000/generate-logo", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ prompt: finalPrompt }),
-    });
+    try {
 
-    const data = await response.json();
-    if (!data.success) throw new Error(data.error || "HF generation failed");
-    return data.url;
+      // Connect to the Hugging Face Space via Gradio client
+      const client = await Client.connect("multimodalart/Qwen-Image-Fast");
+
+      // Call the /run endpoint with parameters, including the prompt
+      const result = await client.predict("/infer", {
+        prompt: finalPrompt,
+        seed: 0,
+        randomize_seed: true,
+        aspect_ratio: "1:1",
+        guidance_scale: 1,
+        num_inference_steps: 4,
+        prompt_enhance: true,
+      });
+
+      // result.data contains the response (likely base64 image or URL)
+      return NextResponse.json({ data: result.data });
+
+    } catch (error) {
+      console.error('Error generating image:', error);
+      return NextResponse.json({ error: 'Failed to generate image' }, { status: 500 });
+    }
   }
 
   const generatePromptAndLogo = async () => {
@@ -34,7 +48,6 @@ function GenerateLogo() {
 
     setLoading(true);
     setError("");
-    setImageUrl();
 
     try {
       // 1️⃣ Create prompt with Gemini
@@ -91,7 +104,7 @@ Return only the final MidJourney prompt, nothing else.`;
 
       <div className='md:w-[25rem] md:h-[25rem] w-[80%] flex justify-center mx-auto'>
         {imageUrl ? <img className='md:w-[25rem] md:h-[25rem] w-[80%]' src={imageUrl} /> : <div className="w-[25rem] h-[25rem] flex justify-center items-center">
-          
+
         </div>}
       </div>
     </div>
