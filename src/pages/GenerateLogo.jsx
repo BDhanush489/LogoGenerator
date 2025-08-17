@@ -94,10 +94,10 @@ Return only the final MidJourney prompt, nothing else.`;
           <h2 className="font-bold mb-2">Generated Logo:</h2>
           <img
             className="w-64 h-64 object-contain rounded shadow"
-            src={imageUrl}
+            src="https://multimodalart-qwen-image-fast.hf.space/gradio_api/file=/tmp/gradio/f7de63b69025b1173f737f256e9a7afd9957843fbeddc30027ef0ed8b570c9df/image.webp"
             alt="Generated Logo"
           />
-          
+        
           <a
             href={imageUrl}
             download="logo.png"
