@@ -97,7 +97,6 @@ Return only the final MidJourney prompt, nothing else.`;
             alt="Generated Logo"
             className="w-64 h-64 object-contain border rounded shadow"
           />
-          <p>{imageUrl}</p>
           
           <a
             href={imageUrl}
