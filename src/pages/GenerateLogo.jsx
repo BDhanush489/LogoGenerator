@@ -92,13 +92,12 @@ Return only the final MidJourney prompt, nothing else.`;
       {imageUrl && (
         <div className="mt-6">
           <h2 className="font-bold mb-2">Generated Logo:</h2>
-          {/* <img
+          <img
             src={imageUrl}
             alt="Generated Logo"
             className="w-64 h-64 object-contain border rounded shadow"
-          /> */}
-          <img src={`/api/proxy?url=${encodeURIComponent(imageUrl)}`} alt="Generated Logo" />
-
+          />
+          <p>{imageUrl}</p>
           
           <a
             href={imageUrl}
