@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 function Header() {
     const [user, setUser] = useState(null);
     console.log(user);
+    const navigate = useNavigate();
 
     //Checking user variable 
     useEffect(() => {
