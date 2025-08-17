@@ -89,24 +89,11 @@ Return only the final MidJourney prompt, nothing else.`;
         </div>
       )}
 
-      {imageUrl && (
-        <div className="mt-6">
-          <h2 className="font-bold mb-2">Generated Logo:</h2>
-          <img
-            className="w-64 h-64 object-contain rounded shadow"
-            src="https://multimodalart-qwen-image-fast.hf.space/gradio_api/file=/tmp/gradio/f7de63b69025b1173f737f256e9a7afd9957843fbeddc30027ef0ed8b570c9df/image.webp"
-            alt="Generated Logo"
-          />
-        
-          <a
-            href={imageUrl}
-            download="logo.png"
-            className="mt-3 inline-block bg-green-600 text-white px-4 py-2 rounded"
-          >
-            Download Logo
-          </a>
-        </div>
-      )}
+      <div className='md:w-[25rem] md:h-[25rem] w-[80%] flex justify-center mx-auto'>
+        {imageUrl ? <img className='md:w-[25rem] md:h-[25rem] w-[80%]' src={imageUrl} /> : <div className="w-[25rem] h-[25rem] flex justify-center items-center">
+          <ScaleLoader />
+        </div>}
+      </div>
     </div>
   );
 }
