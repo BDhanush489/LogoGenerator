@@ -34,7 +34,7 @@ function GenerateLogo() {
 
     setLoading(true);
     setError("");
-    setImageUrl("");
+    setImageUrl();
 
     try {
       // 1️⃣ Create prompt with Gemini
@@ -91,7 +91,7 @@ Return only the final MidJourney prompt, nothing else.`;
 
       <div className='md:w-[25rem] md:h-[25rem] w-[80%] flex justify-center mx-auto'>
         {imageUrl ? <img className='md:w-[25rem] md:h-[25rem] w-[80%]' src={imageUrl} /> : <div className="w-[25rem] h-[25rem] flex justify-center items-center">
-          <ScaleLoader />
+          
         </div>}
       </div>
     </div>
