@@ -28,26 +28,34 @@ function GenerateLogo() {
   //   return data.url;
   // }
 
-  async function queryHF(finalPrompt) {
-    try {
-      const response = await axios.post(
-        "https://api-inference.huggingface.co/models/multimodalart/Qwen-Image-Fast",
-        { inputs: finalPrompt },
-        {
-          headers: {
-            Authorization: `Bearer ${import.meta.env.VITE_HF_API_KEY}`,
-            "Content-Type": "application/json",
-          },
-          responseType: "arraybuffer", // image bytes
-        }
-      );
+ async function queryHF(finalPrompt) {
+  try {
+    const response = await axios.post(
+      "https://api-inference.huggingface.co/models/multimodalart/Qwen-Image-Fast",
+      { inputs: finalPrompt },
+      {
+        headers: {
+          Authorization: `Bearer ${import.meta.env.VITE_HF_API_KEY}`,
+          "Content-Type": "application/json",
+        },
+        responseType: "arraybuffer",
+      }
+    );
 
-      return response.data;
-    } catch (error) {
-      console.error("Error generating image:", error);
-      throw error;
-    }
+    // Convert ArrayBuffer to Base64
+    const base64Image = btoa(
+      new Uint8Array(response.data).reduce(
+        (data, byte) => data + String.fromCharCode(byte),
+        ""
+      )
+    );
+
+    return `data:image/png;base64,${base64Image}`;
+  } catch (error) {
+    console.error("Error generating image:", error);
+    throw error;
   }
+}
 
 
 
