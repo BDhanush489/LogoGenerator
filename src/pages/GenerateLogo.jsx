@@ -16,38 +16,38 @@ function GenerateLogo() {
   const genAI = new GoogleGenerativeAI(import.meta.env.VITE_GEMINI_API_KEY);
 
   // call backend (server.js) → HuggingFace/Gradio
-  async function queryHF(finalPrompt) {
-    const response = await fetch("http://localhost:5000/generate-logo", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ prompt: finalPrompt }),
-    });
-
-    const data = await response.json();
-    if (!data.success) throw new Error(data.error || "HF generation failed");
-    return data.url;
-  }
-
   // async function queryHF(finalPrompt) {
-  //   try {
-  //     const response = await axios.post(
-  //       "https://api-inference.huggingface.co/models/multimodalart/Qwen-Image-Fast",
-  //       { inputs: finalPrompt },
-  //       {
-  //         headers: {
-  //           Authorization: `Bearer ${import.meta.env.VITE_HF_API_KEY}`,
-  //           "Content-Type": "application/json",
-  //         },
-  //         responseType: "arraybuffer", // image bytes
-  //       }
-  //     );
+  //   const response = await fetch("http://localhost:5000/generate-logo", {
+  //     method: "POST",
+  //     headers: { "Content-Type": "application/json" },
+  //     body: JSON.stringify({ prompt: finalPrompt }),
+  //   });
 
-  //     return response.data;
-  //   } catch (error) {
-  //     console.error("Error generating image:", error);
-  //     throw error;
-  //   }
+  //   const data = await response.json();
+  //   if (!data.success) throw new Error(data.error || "HF generation failed");
+  //   return data.url;
   // }
+
+  async function queryHF(finalPrompt) {
+    try {
+      const response = await axios.post(
+        "https://api-inference.huggingface.co/models/multimodalart/Qwen-Image-Fast",
+        { inputs: finalPrompt },
+        {
+          headers: {
+            Authorization: `Bearer ${import.meta.env.VITE_HF_API_KEY}`,
+            "Content-Type": "application/json",
+          },
+          responseType: "arraybuffer", // image bytes
+        }
+      );
+
+      return response.data;
+    } catch (error) {
+      console.error("Error generating image:", error);
+      throw error;
+    }
+  }
 
 
 
