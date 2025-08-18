@@ -2,8 +2,6 @@ import { useLocation } from "react-router-dom";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { useState } from "react";
 
-import { Client } from '@gradio/client';
-
 function GenerateLogo() {
   const { state } = useLocation();
   const { style, logoType, name, color, secondaryColor, fontFamily } = state || {};
