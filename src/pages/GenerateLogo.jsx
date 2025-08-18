@@ -2,6 +2,8 @@ import { useLocation } from "react-router-dom";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { useState } from "react";
 
+import axios from "axios";
+
 function GenerateLogo() {
   const { state } = useLocation();
   const { style, logoType, name, color, secondaryColor, fontFamily } = state || {};
@@ -14,17 +16,41 @@ function GenerateLogo() {
   const genAI = new GoogleGenerativeAI(import.meta.env.VITE_GEMINI_API_KEY);
 
   // call backend (server.js) → HuggingFace/Gradio
-  async function queryHF(finalPrompt) {
-    const response = await fetch("http://localhost:5000/generate-logo", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ prompt: finalPrompt }),
-    });
+  // async function queryHF(finalPrompt) {
+  //   const response = await fetch("http://localhost:5000/generate-logo", {
+  //     method: "POST",
+  //     headers: { "Content-Type": "application/json" },
+  //     body: JSON.stringify({ prompt: finalPrompt }),
+  //   });
 
-    const data = await response.json();
-    if (!data.success) throw new Error(data.error || "HF generation failed");
-    return data.url;
+  //   const data = await response.json();
+  //   if (!data.success) throw new Error(data.error || "HF generation failed");
+  //   return data.url;
+  // }
+
+  async function queryHF(finalPrompt) {
+    try {
+      const response = await axios.post(
+        "https://api-inference.huggingface.co/models/multimodalart/Qwen-Image-Fast",
+        { inputs: finalPrompt },
+        {
+          headers: {
+            Authorization: `Bearer ${import.meta.env.VITE_HF_API_KEY}`,
+            "Content-Type": "application/json",
+          },
+          responseType: "arraybuffer", // image bytes
+        }
+      );
+
+      return response.data;
+    } catch (error) {
+      console.error("Error generating image:", error);
+      throw error;
+    }
   }
+
+
+
 
   const generatePromptAndLogo = async () => {
     if (!style || !logoType || !name) {
@@ -98,7 +124,7 @@ Return only the final MidJourney prompt, nothing else.`;
           />
 
           <p>k;k'afsk;as {imageUrl}</p>
-          
+
           <a
             href={imageUrl}
             download="logo.png"
