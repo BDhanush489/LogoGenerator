@@ -16,17 +16,17 @@ function GenerateLogo() {
   const genAI = new GoogleGenerativeAI(import.meta.env.VITE_GEMINI_API_KEY);
 
   // call backend (server.js) → HuggingFace/Gradio
-  // async function queryHF(finalPrompt) {
-  //   const response = await fetch("http://localhost:5000/generate-logo", {
-  //     method: "POST",
-  //     headers: { "Content-Type": "application/json" },
-  //     body: JSON.stringify({ prompt: finalPrompt }),
-  //   });
+  async function queryHF(finalPrompt) {
+    const response = await fetch("http://localhost:5000/generate-logo", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ prompt: finalPrompt }),
+    });
 
-  //   const data = await response.json();
-  //   if (!data.success) throw new Error(data.error || "HF generation failed");
-  //   return data.url;
-  // }
+    const data = await response.json();
+    if (!data.success) throw new Error(data.error || "HF generation failed");
+    return data.url;
+  }
 
 
 
